@@ -5,14 +5,19 @@ export default function Main() {
     bottomText: "Walk into Mordor",
     imageUrl: "https://i.imgflip.com/1bij.jpg",
   });
-  const [allMemes, setAllMemes] = useState([])
+  const [allMemes, setAllMemes] = useState([]);
+
+  function getMemeImage() {
+    const randomNumber = Math.floor(Math.random() * allMemes.length);
+    const newMemeUrl = allMemes[randomNumber].url;
+    setMeme((prevMeme) => ({ ...prevMeme, imageUrl: newMemeUrl }));
+  }
 
   useEffect(() => {
     async function fetchImage() {
-    const res = await fetch("https://api.imgflip.com/get_memes");
-    const data = await res.json();
-    setAllMemes(data.data.memes)
-    console.log(data.data.memes);
+      const res = await fetch("https://api.imgflip.com/get_memes");
+      const data = await res.json();
+      setAllMemes(data.data.memes);
     }
     fetchImage();
   }, []);
@@ -45,7 +50,7 @@ export default function Main() {
             value={meme.bottomText}
           />
         </label>
-        <button>Get a new meme image 🖼</button>
+        <button onClick={getMemeImage}>Get a new meme image 🖼</button>
       </div>
       <div className="meme">
         <img src={meme.imageUrl} />
